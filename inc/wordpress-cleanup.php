@@ -44,6 +44,39 @@ function ea_dequeue_jquery_migrate( &$scripts ){
 add_filter( 'wp_default_scripts', 'ea_dequeue_jquery_migrate' );
 
 /**
+ * Singular body class
+ *
+ */
+function ea_singular_body_class( $classes ) {
+	if( is_singular() )
+		$classes[] = 'singular';
+	return $classes;
+}
+add_filter( 'body_class', 'ea_singular_body_class' );
+
+/**
+ * Clean body classes
+ *
+ */
+function ea_clean_body_classes( $classes ) {
+
+	$allowed_classes = [
+		'singular',
+		'single',
+		'page',
+		'archive',
+		'admin-bar',
+		'full-width-content',
+		'content-sidebar',
+		'content',
+	];
+
+	return array_intersect( $classes, $allowed_classes );
+
+}
+add_filter( 'body_class', 'ea_clean_body_classes', 20 );
+
+/**
  * Clean Nav Menu Classes
  *
  */
@@ -91,24 +124,28 @@ function ea_clean_post_classes( $classes ) {
 	if( ! is_array( $classes ) )
 		return $classes;
 
-    $allowed_classes = array(
+	$allowed_classes = array(
   		'hentry',
   		'type-' . get_post_type(),
-      'one-half',
-      'one-third',
-      'two-thirds',
-      'one-fourth',
-      'two-fourths',
-      'three-fourths',
-      'one-fifth',
-      'two-fifths',
-      'three-fifths',
-      'four-fifths',
    	);
 
 	return array_intersect( $classes, $allowed_classes );
 }
 add_filter( 'post_class', 'ea_clean_post_classes', 5 );
+
+/**
+ * Archive Title, remove prefix
+ *
+ */
+function ea_archive_title_remove_prefix( $title ) {
+	$title_pieces = explode( ': ', $title );
+	if( count( $title_pieces ) > 1 ) {
+		unset( $title_pieces[0] );
+		$title = join( ': ', $title_pieces );
+	}
+	return $title;
+}
+add_filter( 'get_the_archive_title', 'ea_archive_title_remove_prefix' );
 
 /**
  * Staff comment class
@@ -137,6 +174,16 @@ function ea_remove_avatars_from_comments( $avatar ) {
 add_filter( 'get_avatar', 'ea_remove_avatars_from_comments' );
 
 /**
+ * Comment form, button class
+ *
+ */
+function ea_comment_form_button_class( $args ) {
+	$args['class_submit'] = 'submit wp-block-button__link';
+	return $args;
+}
+add_filter( 'comment_form_defaults', 'ea_comment_form_button_class' );
+
+/**
  * Excerpt More
  *
  */
@@ -144,3 +191,6 @@ function ea_excerpt_more() {
 	return '&hellip;';
 }
 add_filter( 'excerpt_more', 'ea_excerpt_more' );
+
+// Remove inline CSS for emoji
+remove_action( 'wp_print_styles', 'print_emoji_styles' );

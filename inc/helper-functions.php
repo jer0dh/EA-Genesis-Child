@@ -26,21 +26,30 @@ add_filter( 'ea_the_content', 'do_shortcode'       );
  * @param int $post_id
  * @return string/object
  */
-function ea_first_term( $taxonomy = 'category', $field = false, $post_id = false ) {
+function ea_first_term( $args = [] ) {
 
-	$post_id = $post_id ? $post_id : get_the_ID();
+	$defaults = [
+		'taxonomy'	=> 'category',
+		'field'		=> null,
+		'post_id'	=> null,
+	];
+
+	$args = wp_parse_args( $args, $defaults );
+
+	$post_id = !empty( $args['post_id'] ) ? intval( $args['post_id'] ) : get_the_ID();
+	$field = !empty( $args['field'] ) ? esc_attr( $args['field'] ) : false;
 	$term = false;
 
 	// Use WP SEO Primary Term
 	// from https://github.com/Yoast/wordpress-seo/issues/4038
 	if( class_exists( 'WPSEO_Primary_Term' ) ) {
-		$term = get_term( ( new WPSEO_Primary_Term( $taxonomy,  $post_id ) )->get_primary_term(), $taxonomy );
+		$term = get_term( ( new WPSEO_Primary_Term( $args['taxonomy'],  $post_id ) )->get_primary_term(), $args['taxonomy'] );
 	}
 
 	// Fallback on term with highest post count
 	if( ! $term || is_wp_error( $term ) ) {
 
-		$terms = get_the_terms( $post_id, $taxonomy );
+		$terms = get_the_terms( $post_id, $args['taxonomy'] );
 
 		if( empty( $terms ) || is_wp_error( $terms ) )
 			return false;
@@ -74,7 +83,7 @@ function ea_first_term( $taxonomy = 'category', $field = false, $post_id = false
 	}
 
 	// Output
-	if( $field && isset( $term->$field ) )
+	if( !empty( $field ) && isset( $term->$field ) )
 		return $term->$field;
 
 	else
@@ -123,25 +132,46 @@ function ea_icon( $atts = array() ) {
 		'group'	=> 'utility',
 		'size'	=> 16,
 		'class'	=> false,
+		'label'	=> false,
 	), $atts );
 
 	if( empty( $atts['icon'] ) )
 		return;
 
-	$icon_path = get_stylesheet_directory() . '/assets/icons/' . $atts['group'] . '/' . $atts['icon'] . '.svg';
+	$icon_path = get_theme_file_path( '/assets/icons/' . $atts['group'] . '/' . $atts['icon'] . '.svg' );
 	if( ! file_exists( $icon_path ) )
 		return;
 
-	$icon = file_get_contents( $icon_path );
+		$icon = file_get_contents( $icon_path );
 
-	$class = 'svg-icon';
-	if( !empty( $atts['class'] ) )
-		$class .= ' ' . esc_attr( $atts['class'] );
+		$class = 'svg-icon';
+		if( !empty( $atts['class'] ) )
+			$class .= ' ' . esc_attr( $atts['class'] );
 
-	$repl = sprintf( '<svg class="' . $class . '" width="%d" height="%d" aria-hidden="true" role="img" focusable="false" ', $atts['size'], $atts['size'] );
-	$svg  = preg_replace( '/^<svg /', $repl, trim( $icon ) ); // Add extra attributes to SVG code.
-	$svg  = preg_replace( "/([\n\t]+)/", ' ', $svg ); // Remove newlines & tabs.
-	$svg  = preg_replace( '/>\s*</', '><', $svg ); // Remove white space between SVG tags.
+		if( false !== $atts['size'] ) {
+			$repl = sprintf( '<svg class="' . $class . '" width="%d" height="%d" aria-hidden="true" role="img" focusable="false" ', $atts['size'], $atts['size'] );
+			$svg  = preg_replace( '/^<svg /', $repl, trim( $icon ) ); // Add extra attributes to SVG code.
+		} else {
+			$svg = preg_replace( '/^<svg /', '<svg class="' . $class . '"', trim( $icon ) );
+		}
+		$svg  = preg_replace( "/([\n\t]+)/", ' ', $svg ); // Remove newlines & tabs.
+		$svg  = preg_replace( '/>\s*</', '><', $svg ); // Remove white space between SVG tags.
 
-	return $svg;
+		if( !empty( $atts['label'] ) ) {
+			$svg = str_replace( '<svg class', '<svg aria-label="' . esc_attr( $atts['label'] ) . '" class', $svg );
+			$svg = str_replace( 'aria-hidden="true"', '', $svg );
+		}
+
+		return $svg;
+}
+
+/**
+ * Has Action
+ *
+ */
+function ea_has_action( $hook ) {
+	ob_start();
+	do_action( $hook );
+	$output = ob_get_clean();
+	return !empty( $output );
 }

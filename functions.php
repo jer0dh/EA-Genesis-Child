@@ -19,7 +19,7 @@ Devs, contact me if you need access
  *
  */
 if ( ! isset( $content_width ) )
-    $content_width = 1024;
+    $content_width = 768;
 
 /**
  * Global enqueues
@@ -30,19 +30,22 @@ if ( ! isset( $content_width ) )
 function ea_global_enqueues() {
 
 	// javascript
-	wp_enqueue_script( 'ea-global', get_stylesheet_directory_uri() . '/assets/js/global-min.js', array( 'jquery' ), filemtime( get_stylesheet_directory() . '/assets/js/global-min.js' ), true );
+	if( ! ea_is_amp() ) {
+		wp_enqueue_script( 'ea-global', get_stylesheet_directory_uri() . '/assets/js/global-min.js', array( 'jquery' ), filemtime( get_stylesheet_directory() . '/assets/js/global-min.js' ), true );
+
+		// Move jQuery to footer
+		if( ! is_admin() ) {
+			wp_deregister_script( 'jquery' );
+			wp_register_script( 'jquery', includes_url( '/js/jquery/jquery.js' ), false, NULL, true );
+			wp_enqueue_script( 'jquery' );
+		}
+
+	}
 
 	// css
-    wp_dequeue_style( 'child-theme' );
+	wp_dequeue_style( 'child-theme' );
 	wp_enqueue_style( 'ea-fonts', ea_theme_fonts_url() );
-    wp_enqueue_style( 'ea-style', get_stylesheet_directory_uri() . '/assets/css/main.css', array(), CHILD_THEME_VERSION );
-
-	// Move jQuery to footer
-	if( ! is_admin() ) {
-		wp_deregister_script( 'jquery' );
-		wp_register_script( 'jquery', includes_url( '/js/jquery/jquery.js' ), false, NULL, true );
-		wp_enqueue_script( 'jquery' );
-	}
+	wp_enqueue_style( 'ea-style', get_stylesheet_directory_uri() . '/assets/css/main.css', array(), filemtime( get_stylesheet_directory() . '/assets/css/main.css' ) );
 }
 add_action( 'wp_enqueue_scripts', 'ea_global_enqueues' );
 
@@ -61,13 +64,7 @@ add_action( 'enqueue_block_editor_assets', 'ea_gutenberg_scripts' );
  *
  */
 function ea_theme_fonts_url() {
-	$font_families = apply_filters( 'ea_theme_fonts', array( 'Source+Sans+Pro:400,400i,700,700i' ) );
-	$query_args = array(
-		'family' => implode( '|', $font_families ),
-		'subset' => 'latin,latin-ext',
-	);
-	$fonts_url = add_query_arg( $query_args, 'https://fonts.googleapis.com/css' );
-	return esc_url_raw( $fonts_url );
+	return false;
 }
 
 /**
@@ -82,17 +79,34 @@ function ea_child_theme_setup() {
 
 	define( 'CHILD_THEME_VERSION', filemtime( get_stylesheet_directory() . '/assets/css/main.css' ) );
 
-	// Includes
+	// General cleanup
 	include_once( get_stylesheet_directory() . '/inc/wordpress-cleanup.php' );
 	include_once( get_stylesheet_directory() . '/inc/genesis-changes.php' );
+
+	// Theme
 	include_once( get_stylesheet_directory() . '/inc/markup.php' );
-	include_once( get_stylesheet_directory() . '/inc/login-logo.php' );
-    include_once( get_stylesheet_directory() . '/inc/tinymce.php' );
-	include_once( get_stylesheet_directory() . '/inc/disable-editor.php' );
 	include_once( get_stylesheet_directory() . '/inc/helper-functions.php' );
+	include_once( get_stylesheet_directory() . '/inc/layouts.php' );
 	include_once( get_stylesheet_directory() . '/inc/navigation.php' );
 	include_once( get_stylesheet_directory() . '/inc/loop.php' );
-	//include_once( get_stylesheet_directory() . '/inc/custom-logo.php' );
+	include_once( get_stylesheet_directory() . '/inc/author-box.php' );
+	include_once( get_stylesheet_directory() . '/inc/template-tags.php' );
+	include_once( get_stylesheet_directory() . '/inc/site-footer.php' );
+
+	// Editor
+	include_once( get_stylesheet_directory() . '/inc/disable-editor.php' );
+	include_once( get_stylesheet_directory() . '/inc/tinymce.php' );
+
+	// Functionality
+	include_once( get_stylesheet_directory() . '/inc/login-logo.php' );
+	include_once( get_stylesheet_directory() . '/inc/block-area.php' );
+	include_once( get_stylesheet_directory() . '/inc/social-links.php' );
+
+	// Plugin Support
+	include_once( get_stylesheet_directory() . '/inc/acf.php' );
+	include_once( get_stylesheet_directory() . '/inc/amp.php' );
+	include_once( get_stylesheet_directory() . '/inc/shared-counts.php' );
+	include_once( get_stylesheet_directory() . '/inc/wpforms.php' );
 
 	// Editor Styles
 	add_theme_support( 'editor-styles' );
@@ -115,21 +129,21 @@ function ea_child_theme_setup() {
 	// -- Editor Font Styles
 	add_theme_support( 'editor-font-sizes', array(
 		array(
-			'name'      => __( 'small', 'ea_genesis_child' ),
+			'name'      => __( 'Small', 'ea_genesis_child' ),
 			'shortName' => __( 'S', 'ea_genesis_child' ),
-			'size'      => 12,
+			'size'      => 14,
 			'slug'      => 'small'
 		),
 		array(
-			'name'      => __( 'regular', 'ea_genesis_child' ),
+			'name'      => __( 'Normal', 'ea_genesis_child' ),
 			'shortName' => __( 'M', 'ea_genesis_child' ),
-			'size'      => 16,
-			'slug'      => 'regular'
+			'size'      => 20,
+			'slug'      => 'normal'
 		),
 		array(
-			'name'      => __( 'large', 'ea_genesis_child' ),
+			'name'      => __( 'Large', 'ea_genesis_child' ),
 			'shortName' => __( 'L', 'ea_genesis_child' ),
-			'size'      => 20,
+			'size'      => 24,
 			'slug'      => 'large'
 		),
 	) );
@@ -142,22 +156,12 @@ function ea_child_theme_setup() {
 		array(
 			'name'  => __( 'Blue', 'ea_genesis_child' ),
 			'slug'  => 'blue',
-			'color'	=> '#59BACC',
+			'color'	=> '#05306F',
 		),
 		array(
-			'name'  => __( 'Green', 'ea_genesis_child' ),
-			'slug'  => 'green',
-			'color' => '#58AD69',
-		),
-		array(
-			'name'  => __( 'Orange', 'ea_genesis_child' ),
-			'slug'  => 'orange',
-			'color' => '#FFBC49',
-		),
-		array(
-			'name'	=> __( 'Red', 'ea_genesis_child' ),
-			'slug'	=> 'red',
-			'color'	=> '#E2574C',
+			'name'  => __( 'Grey', 'ea_genesis_child' ),
+			'slug'  => 'grey',
+			'color' => '#FAFAFA',
 		),
 	) );
 
@@ -180,12 +184,13 @@ function ea_comment_text( $args ) {
 }
 add_filter( 'comment_form_defaults', 'ea_comment_text' );
 
+
 /**
  * Template Hierarchy
  *
  */
 function ea_template_hierarchy( $template ) {
-	if( is_home() || is_search() )
+	if( is_home() )
 		$template = get_query_template( 'archive' );
 	return $template;
 }
