@@ -1,0 +1,35 @@
+ { 
+    "primeDirective": "Do a good job",
+
+    "production" : false,
+
+    "projectSrcFolder": "/home/jer0dh/Projects/EA-Genesis-child/",
+    "projectDestFolder": "/media/sf_Local_Sites/solarsites/app/public/wp-content/themes/EA-Genesis-child",
+
+    "style" : true,
+    "stylePathAbsolute" : false,
+    "styleSrc": "assets/scss",
+    "styleDest" : "/assets/css",
+
+    "javascript" : true,
+    "javascriptPathAbsolute" : false,
+    "javascriptScriptSrc" : "assets/js/src",
+    "javascriptScripts" : [
+        "assets/js/src/smoothscroll.js",
+        "assets/js/src/global.js"
+    ],
+    "javascriptVendorScripts" : [],
+    "javascriptDest": "assets/js",
+    "javascriptScriptName": "global.js",
+
+    "php": true,
+    "phpPathAbsolute" : false,
+    "phpSrc": "",
+    "phpDest": "",
+
+    "files": true,
+    "filesPathAbsolute" : false,
+    "filesSrc" : "",
+    "filesDest": ""
+
+}
