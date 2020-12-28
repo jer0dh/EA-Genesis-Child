@@ -11,15 +11,11 @@
 // Full Width
 add_filter( 'genesis_pre_get_option_site_layout', '__genesis_return_full_width_content' );
 
-/**
- * Blog Archive Body Class
- *
- */
-function ea_blog_archive_body_class( $classes ) {
-	$classes[] = 'archive';
-	return $classes;
-}
-add_filter( 'body_class', 'ea_blog_archive_body_class' );
+// Narrow
+add_filter( 'body_class', 'ea_add_narrow_class' );
+add_filter( 'genesis_post_info', 'ea_get_archive_post_info' );
+
+add_action( 'genesis_entry_content', 'ea_add_read_more_button', 12 );
 
 // Move breadcrumbs
 remove_action( 'genesis_before_loop', 'genesis_do_breadcrumbs' );

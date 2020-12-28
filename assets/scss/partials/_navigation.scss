@@ -2,6 +2,7 @@
 ---------------------------------------------------------------------------------------------------- */
 
 .nav-menu {
+	margin-left: auto;
 
 	& > * {
 		line-height: 0;
@@ -17,13 +18,14 @@
 	.menu-item {
 		list-style: none;
 		position: relative;
+		text-transform: uppercase;
 
 		a {
 			border: none;
-			color: $base-color;
+			color: map-get($brand_colors, 'red' );
 			display: block;
-			font-size: 16px;
-			font-weight: 400;
+			font-size: to-em(12px);
+			font-weight: 800;
 			line-height: 22px;
 			padding: 13px 18px;
 			position: relative;
@@ -40,6 +42,24 @@
 		}
 	}
 
+	.menu-item.button {
+		background: transparent;
+		border: none;
+		padding: 0;
+		a {
+			background: brand-color('blue');
+			font-size: 1em;
+			padding: 7px 27px;
+			margin: 6px 0;
+			 color: inherit;
+			 font-weight: 400;
+		}
+
+		a:hover, a:focus {
+			background: brand-color('blue', 'darken');
+		}
+	}
+
 	.submenu-expand {
 		@include button-reset;
 		position: absolute;
@@ -49,7 +69,7 @@
 		right: 7px;
 
 		svg {
-			fill: $grey_7;
+			fill: map-get($brand_colors, 'blue' );
 		}
 	}
 

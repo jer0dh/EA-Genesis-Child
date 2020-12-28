@@ -47,7 +47,7 @@ remove_action( 'wp_head', 'genesis_load_favicon' );
 remove_action( 'genesis_site_description', 'genesis_seo_site_description' );
 
 // Remove post info and meta
-remove_action( 'genesis_entry_header', 'genesis_post_info', 12 );
+//remove_action( 'genesis_entry_header', 'genesis_post_info', 12 );
 remove_action( 'genesis_entry_footer', 'genesis_post_meta' );
 
 // Remove unused sidebars
@@ -81,7 +81,7 @@ add_filter( 'genesis_search_form', 'ea_search_form' );
  *
  */
 function ea_disable_customizer_theme_settings( $config ) {
-	$remove = [ 'genesis_header', 'genesis_single', 'genesis_archives', 'genesis_footer' ];
+	$remove = [ 'genesis_header', 'genesis_single', 'genesis_footer' ];
 	foreach( $remove as $item ) {
 		unset( $config['genesis']['sections'][ $item ] );
 	}

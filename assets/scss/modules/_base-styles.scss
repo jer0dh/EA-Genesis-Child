@@ -1,9 +1,9 @@
 @mixin base-style {
 	color: $base-color;
 	font-family: $sans-serif;
-	@include font-sizes( 18px, 20px );
+	@include font-sizes( 18px, $global-font-size );
 	font-weight: 400;
-	line-height: 1.55;
+	line-height: 1.5;
 
 	@media print {
 		font-family: sans-serif;
@@ -22,4 +22,97 @@
 		color: $highlight;
 		text-decoration: none;
 	}
+}
+
+@mixin button() {
+	border: 2px solid;
+	border-radius: 0;
+	font-weight: 600;
+	font-size: to-em(16px);
+	line-height: 1.5;
+	padding: to-em(12px, 16px) to-em(40px, 16px);
+	text-decoration: none;
+	text-transform: uppercase;
+	text-align: center;
+}
+
+@mixin button-styles( $default ) {
+
+	.is-style-full &,
+	&.full,
+	&.is-style-full {
+		display: block;
+		width: 100%;
+
+	}
+
+
+	&:not(.has-text-color) {
+		color: white;
+
+		&:hover {
+			color: white;
+		}
+	}
+	&:not(.has-background) {
+		background-color: brand-color( $default );
+		border-color: brand-color( $default );
+
+		&:hover,
+		&:focus {
+			background-color: brand-color( $default, 'darken' );
+			border-color:  brand-color( $default, 'darken' );
+		}
+	}
+
+	.is-style-outline &,
+	&.is-style-outline,.is-style-outline-small &,
+	&.is-style-outline-small {
+		background-color: transparent;
+	}
+	.is-style-outline &:not(.has-text-color),
+	&.is-style-outline:not(.has-text-color),
+	.is-style-outline-small &:not(.has-text-color),
+	&.is-style-outline-small:not(.has-text-color) {
+		color: brand-color( $default );
+
+		&:hover {
+			color: white;
+		}
+	}
+
+	&.is-style-outline-small, .is-style-outline-small &, 
+	&.is-style-button-small, .is-style-button-small & {
+		font-size: to-em(12px);
+	}
+
+	@each $name, $color in $brand_colors {
+
+		&.has-#{$name}-background-color {
+			background-color: $color;
+		    border-color: $color;
+		}
+		//.has-#{$name}-color style is already defined in _blocks-core.scss
+
+		&.has-#{$name}-color:hover,
+		&.has-#{$name}-color:focus {
+			color: $color;
+		}
+
+		&.has-#{$name}-background-color:hover,
+		&.has-#{$name}-background-color:focus {
+			background-color: brand-color( $name, 'darken' );
+			border-color:  brand-color( $name, 'darken' );
+		}
+
+		.is-style-outline &.has-#{$name}-color,
+		&.has-#{$name}-color.is-style-outline,
+		.is-style-outline-small &.has-#{$name}-color,
+		&.has-#{$name}-color.is-style-outline-small  {
+			color: $color;
+			border-color: $color;
+		}
+
+	}
+
 }

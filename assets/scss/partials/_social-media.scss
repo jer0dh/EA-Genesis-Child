@@ -1,0 +1,52 @@
+.ea-social-media{
+    display: flex;
+
+    margin-left: -0.5em;
+    li {
+
+        list-style-type: none;
+        margin-left: 0.5em;
+    }
+    img {
+        width:  to-em(25px, 12px);
+    }
+}
+
+.ea-contact-icons {
+    display: flex;
+    margin-left: -0.8em;
+
+    li {
+        list-style-type: none;
+        margin-left: 0.8em;
+    }
+    a {
+        display:flex;
+        text-decoration: none;
+    }
+
+    /* adding height since even with height: auto, Win7 Chome70 would keep the height as original width making
+     * the container very tall */
+    img {
+        width: to-em( 18px, 12px );
+        height: to-em( 18px, 12px );
+        margin-right: 0.2em;
+
+        @include media('>mobile_menu') {
+            width: to-em( 15px, 12px );
+            height: to-em( 15px, 12px );
+        }
+    }
+
+
+}
+
+.ea-contact-icons__name {
+    display: none;
+}
+
+@include media('>mobile_menu') {
+    .ea-contact-icons__name {
+        display: inline-block;
+    }
+}

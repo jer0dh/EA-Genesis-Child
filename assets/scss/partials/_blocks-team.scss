@@ -1,0 +1,26 @@
+.ea-team {
+
+    & > figure {
+        align-self: start !important;
+    }
+
+    h2 {
+        font-size: to-em(31px);
+        line-height: 1.32;
+        text-transform: uppercase;
+        margin-bottom: 7px;
+    }
+
+    .ea-job-title {
+        font-size: to-em(18px);
+        line-height: 1.44;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+    }
+    .ea-read-more:after {
+        content: '\00BB';
+        transform: rotate(90deg);
+        display: inline-block;
+        margin-left: 0.3em;
+    }
+}

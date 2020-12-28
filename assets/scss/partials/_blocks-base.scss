@@ -75,9 +75,18 @@ p {
 	margin: 0 0 $base-margin;
 	padding: 0;
 
+
 	&.large,
 	&.has-large-font-size {
-    	@include font-sizes( 21px, 24px );
+		@include font-sizes( 21px, 24px );
+		margin-bottom: 30px;
+		line-height: 1.25; // (30/24)
+	}
+	&.large-2,
+	&.has-large-2-font-size {
+		@include font-sizes( 21px, 24px );
+		margin-bottom: 34px;
+		line-height: 1.42; // (34/24)
 	}
 
 	&.has-normal-font-size {
@@ -86,31 +95,30 @@ p {
 
 	&.small,
 	&.has-small-font-size {
-	    font-size: 14px;
+		font-size: 16px;
+		margin-bottom: 20px;
+		line-height: 1.25; // (20/16);
 	}
+
+
 }
 
 /* Headings
 --------------------------------------------- */
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+@mixin heading-defaults {
 	color: $grey_10;
-	font-family: $serif;
-	font-weight: 400;
+	font-family: $sans-serif;
+	font-weight: 800;
 	line-height: 1.2;
 	margin: 0 0 16px;
+	//margin-bottom: 16px;
 
 	a {
 		color: $grey_10;
-
+		text-decoration: none;
+		
 		&:hover {
 			color: $highlight;
-			text-decoration: none;
 		}
 	}
 
@@ -118,19 +126,79 @@ h6 {
 		outline: none;
 	}
 }
+$h1-mb: 28px;
+$h1-medium-mb: 60px;
+$h2-mb: 8px;
+$h3-mb: 30px;
+$h3-small-mb: 10px;
 
-h1 {
-    @include font-sizes( 34px, 42px, 46px );
+@mixin h1-style {
+	@include font-sizes( to-em(41px), to-em(57px) );
+	text-transform: uppercase;
+	line-height: 1.05; //(60/57)
+	margin-bottom: $h1-mb;
+} 
+
+@mixin h1-medium-style {
+	@include font-sizes( to-em(39px), to-em(50px) );
+	// line-height: 1.2; // (60/50)
+	margin-bottom: $h1-medium-mb;
 }
 
-h2 {
-    @include font-sizes( 26px, 32px, 36px );
+@mixin h2-style {
+	font-size: to-em(25px);
+	text-transform: uppercase;
+	margin-bottom: $h2-mb;
+	//line-height: 1.2; // (30/25)
 }
 
-h3 {
-    @include font-sizes( 22px, 26px, 28px );
+@mixin h2-medium-style {
+	text-transform: none;
 }
 
-h4, h5, h6 {
-    @include font-sizes( 18px, 22px );
+@mixin h3-style {
+	font-size: to-em(20px);
+	line-height: 1.5; // (30/20);
+	margin-bottom: $h3-mb;
+}
+
+@mixin h3-small-style {
+	font-size: to-em(18px);
+	text-transform: none;
+	line-height: 1.2; // (22/18)
+	margin-bottom: $h3-small-mb;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	@include heading-defaults;
+}
+
+h1, .is-style-h1 {
+	@include h1-style;
+}
+
+
+h2, .is-style-h2 {
+	@include h2-style;
+}
+
+h3, .is-style-h3 {
+	@include h3-style;
+}
+
+
+.is-style-h1-medium {
+  @include h1-medium-style;
+}
+
+.is-style-h2-medium {
+  @include h2-medium-style;
+}
+
+.is-style-h3-small {
+  @include h3-small-style;
 }

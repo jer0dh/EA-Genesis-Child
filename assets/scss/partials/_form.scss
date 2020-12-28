@@ -64,3 +64,30 @@ textarea {
 
 	}
 }
+
+
+/* Gravity Form 
+------------------------------- 
+Adding even more specificity due to Gravity Form's high specificity styling */
+
+body {
+	.gform_wrapper {
+		label.gfield_label {
+			font-size: to-em(12px);
+			font-weight: 800;
+			text-transform: uppercase;
+			color: map-get($brand_colors, 'blue');
+		}
+
+
+		.gform_footer input[type=submit] {
+			@include button();
+		}
+
+		input, select, textarea {
+			border: 1px solid map-get( $brand_colors, 'blue' );
+		}
+
+	}
+
+}

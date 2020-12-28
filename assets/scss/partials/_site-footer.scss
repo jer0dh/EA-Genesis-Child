@@ -1,13 +1,39 @@
 /* Footer Widgets
 ---------------------------------------------------------------------------------------------------- */
 
+.footer-widget-area > *:first-child {
+
+  h2 {
+	margin-bottom: 0;
+  }
+
+  hr {
+	  margin-top: 0;
+  }
+} 
+
 .footer-widgets {
-	background: brand-color( 'blue' );
+	background: brand-color( 'black' );
 	padding: 40px 0 10px;
 	position: relative;
+	color: $white;
 
+	.entry-header {
+		margin-top: 0;  // override css for .single and .singlular .entry-header
+	}
+	h2 {
+		color: map-get($brand_colors, 'cyan');
+		font-size: to-em(24px);
+	}
+	hr::before {
+		background-color: map-get($brand_colors, 'cyan');
+	}
 	ul {
 		margin-bottom: 30px;
+	}
+
+	p {
+		font-size: to-em(15px);
 	}
 
 	li {
@@ -37,15 +63,90 @@
 		}
 	}
 
-	@include media("<tablet") {
-		.social-links li {
-				display: inline-block;
-				margin: 0;
+	/* Feature Post Widget */
+	.featuredpost article {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-flow: row nowrap;
+		margin-bottom: 0.8em;
+		border-bottom: 1px solid map-get($brand_colors, 'cyan' );
+
+		&:last-child {
+			border-bottom: 0;
 		}
 
-		.social-links .label {
-			display: none;
+		.entry-header {
+			padding-right: 1em;
+			margin-bottom: 0;
+			text-align: left;
 		}
+
+		.entry-title, .entry-meta {
+			font-size: to-em(16px);
+		}
+		.entry-title a {
+			color: map-get( $brand_colors, 'cyan');
+			text-decoration: underline;
+
+			&:hover, &:focus {
+				color: $white;
+			}
+		}
+
+		img {
+			margin: 0 auto;
+		}
+
+		& > *:first-child {
+			flex: 1 1 25%;
+			min-width: 63px;
+			max-width: 88px;
+			padding-bottom: 0.6em;
+		}
+		& > *:last-child {
+			padding-left: 2em;
+			flex: 1 1 75%;
+			min-width: 150px;
+			padding-bottom: 0.6em;
+		}
+
+		h4 {
+			margin-top: 0;
+		}
+	}
+
+	/* Menu */
+
+	.menu {
+		
+		li {
+			margin-bottom: 0;
+			color: map-get($brand_colors, 'cyan' );
+			&::before {
+				content: '\00bb\00a0';
+				
+			}
+		}
+
+		a {
+			color: map-get($brand_colors, 'cyan' );
+			text-decoration: underline;
+			font-size: to-em(16px);
+
+			&:hover, &:focus {
+				color: $white;
+			}
+		}
+	}
+
+	.footer-widgets-1, .footer-widgets-2, .footer-widgets-3 {
+		overflow: hidden;
+		width: 100%;
+		margin-bottom: 1.4em;
+	}
+
+	@include media(">533px") {
 
 		.footer-widgets-1 {
 			float: left;
@@ -61,12 +162,14 @@
 			overflow: hidden;
 			width: 100%;
 		}
+
 	}
 
-	@include media(">=tablet") {
+	@include media(">=1190px") {
 		.wrap {
-			@include columns( 3, 'div' );
+			@include columns( 3, 'div', 100px );
 		}
+
 	}
 }
 
@@ -74,10 +177,11 @@
 ---------------------------------------------------------------------------------------------------- */
 
 .site-footer {
-	background: brand-color( 'blue', 'darken' );
+	border-top: 1px solid map-get($brand_colors, 'cyan' );
+	background: brand-color( 'black' );
 	color: rgba( $white, .75 );
-	font-size: 14px;
-	padding: 32px 0;
+	font-size: to-em(15px);
+	padding: 22px 0;
 	text-align: center;
 
 	.wrap > *:last-child {
@@ -85,19 +189,16 @@
 	}
 
 	a {
-		color: rgba( $white, .75 );
+		color: map-get( $brand_colors, 'cyan');
+		text-decoration: underline;
 
-		&:hover {
-			color: rgba( $white, 1 );
+		&:hover, &:focus {
+			color: $white;
 		}
 	}
 
 	.footer-links a + a {
 		margin-left: 12px;
-	}
-
-	.cafemedia {
-		text-transform: uppercase;
 	}
 
 	.backtotop {
@@ -141,4 +242,28 @@
 		}
 	}
 
+}
+
+.footer-logos {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-evenly;
+	align-items: center;
+	margin-left: -2em;
+}
+
+.footer-logos > * {
+	margin-left: 2em;
+	margin-bottom: 2em;
+	 flex: 1 1 calc(50% - 2em);
+
+}
+
+.footer-widgets-2 {
+	& > section {
+		padding-right: 1em;
+	}
+	& > section:first-child {
+		padding-right: 0;
+	}
 }

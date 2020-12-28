@@ -1,71 +1,70 @@
+/* Headings
+--------------------------------------------- */
+
+h1 {
+
+	&.has-small-font-size {
+		font-size: to-em(25px);
+	}
+	&.has-large-font-size {
+		font-size: to-em(57px);
+	}
+}
+
+h2 {
+	&.has-small-font-size {
+		font-size: to-em(24px);
+	}
+	&.has-normal-font-size {
+		font-size: to-em(25px);
+	}
+	&.has-large-font-size {
+		font-size: to-em(49px);
+	}
+}
+h3 {
+	&.has-small-font-size {
+		font-size: to-em(18px);
+	}
+	&.has-normal-font-size {
+		font-size: to-em(20px);
+	}
+	&.has-large-font-size {
+		font-size: to-em(25px);
+	}
+
+}
+
 /* Button
 --------------------------------------------- */
 
 $default: nth( nth( $brand_colors, 1 ), 1 ); // first color in $brand_colors array
 
 .wp-block-button__link {
-	border: 2px solid brand-color( $default, 'darken' );
-	border-radius: 3px;
-	font-size: 20px;
-	font-weight: 700;
-	line-height: 32px;
-	padding: 16px 32px;
-	text-decoration: none;
-
-	.is-style-full &,
-	&.full {
-		display: block;
-		width: 100%;
-	}
-
-	&:not(.has-text-color) {
-		color: white;
-
-		&:hover {
-			color: white;
-		}
-	}
-
-	&:not(.has-background) {
-		background-color: brand-color( $default );
-
-		&:hover,
-		&:focus {
-			background-color: brand-color( $default, 'darken' );
-		}
-	}
-
-	@each $name, $color in $brand_colors {
-
-		&.has-#{$name}-color:hover,
-		&.has-#{$name}-color:focus {
-			color: $color;
-		}
-
-		&.has-#{$name}-background-color:hover,
-		&.has-#{$name}-background-color:focus {
-			background-color: brand-color( $name, 'darken' );
-		}
-	}
+	@include button();
+    @include button-styles( $default );
 
 }
 
 /* Blockquote
 --------------------------------------------- */
 
-blockquote,
-blockquote.wp-block-quote {
-	background: transparent url(../icons/utility/quote.svg) no-repeat top left;
-	background-size: 36px auto;
-	padding-top: 36px + 11px;
-	text-align: left;
+.entry-content blockquote,
+blockquote.wp-block-quote,
+blockquote.wp-block-quote:not(.is-large):not(.is-style-large) {
 
+    text-align: left;
+    border-left: 3px solid map-get( $brand_colors, 'red' );
+    padding: 0 1.5rem;
+    margin-left: 10%;
+    margin-right: 10%;
 	p {
-		color: $base-color;
-		font-size: 24px;
+		color: map-get( $brand_colors, 'red' );
+		font-size: to-em(26px);
 		font-style: normal;
 		font-weight: 400;
 	}
+
 
 	cite,
 	.wp-block-quote__citation {
@@ -80,7 +79,7 @@ blockquote.wp-block-quote {
 
     p:last-of-type {
         margin-bottom: 0;
-    }
+	}
 
 }
 
@@ -105,6 +104,11 @@ hr {
 		top: 50%;
 		margin-top: -.5px;
 	}
+}
+.wp-block-separator.is-style-page-title::before {
+	background: brand-color( 'red' );
+	width: 2em;
+
 }
 
 /* Image
@@ -160,30 +164,45 @@ img {
 
 	.has-#{$name}-color {
 		color: $color;
-	}
+	} 
 
 	.has-#{$name}-background-color {
 		background-color: $color;
 	}
 }
 
+/* Cover
+--------------------------------------------- */
+.wp-block-cover {
+	justify-content: flex-start;
+
+	.wp-block-cover__inner-container {
+	    max-width: map-get( $breakpoints, 'content-width' );
+		margin: 0 auto;
+
+		@include clearfix;
+
+		& > *:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+
+}
+
+
 /* Group
 --------------------------------------------- */
 
 .wp-block-group {
-	padding: 40px 16px;
+	padding-top: 15px;
+	padding-bottom: 15px;
 
-	@include media(">=tablet") {
-		padding: 60px 16px;
-	}
-
-	@include media(">=medium") {
-		padding: 70px 16px;
-	}
 
 	.wp-block-group__inner-container {
-		max-width: $content_width;
+	    max-width: map-get( $breakpoints, 'content-width' );
 		margin: 0 auto;
+
 		@include clearfix;
 
 		& > *:last-child {
@@ -199,4 +218,195 @@ img {
 			color: $white;
 		}
 	}
+}
+
+/* ea-grid pattern */
+.wp-block-group.ea-grid {
+	padding-top: 15px;
+	padding-bottom: 15px;
+
+	& > .wp-block-group__inner-container {
+		display: flex;
+		flex-flow: row wrap;
+		align-items: stretch;
+		margin-left: -4em; 
+
+
+		// grid-item
+		& > .wp-block-group {
+			padding-top: 0;
+			padding-bottom: 0;
+			margin-left: 4em;
+			margin-bottom: 40px;
+			@include media('>=medium') {
+				flex-basis: calc( 30% - 2em);
+			}
+		}
+	}
+
+	// grid-item Inner group container
+	& > .wp-block-group__inner-container .wp-block-group__inner-container {
+		display: flex;
+		flex-flow: column nowrap;
+		height: 100%;
+
+		// assuming button will need to be at the bottom to be aligned with other buttons 
+		.wp-block-buttons {
+			margin-top: auto;
+		}
+
+		.wp-block-image img {
+			width: 70%;
+		}
+	}
+	// remove default margins for figure element
+	figure {
+		margin: 0;
+		
+	}
+	img {
+		margin-bottom: 1em;
+	}
+
+}
+
+/* wp-block-column added styles for Team block
+Added .gap-large to increase gap on desktop
+Added .reverse-order to reverse order of columns on mobile and desktop
+Added additional css to wp's .is-vertically-aligned-center to remove margin-bottom of last child element
+Added css to remove margin-bottom of a wp-block-columns if inside a wp-block-cover to help with vertical centering
+--------------------------------------------- */
+.reverse-order .wp-block-column:first-child {
+	order: 5;
+}
+
+@include media('>782px') {
+	.gap-large .wp-block-column:not(:first-child) {
+		margin-left: 100px;
+	}
+}
+
+@include media('>600px') {
+	.reverse-order .wp-block-column:first-child {
+		order: 0;
+	}
+}
+
+.wp-block-columns .is-vertically-aligned-center > *:last-child {
+	margin-bottom: 0;
+}
+
+/* Adds padding when the columns may be stacked.  mt and mb keeps it vertically center when not stacked */
+.wp-block-columns .is-vertically-aligned-center {
+	margin-bottom: 1em;
+	margin-top: 1em;
+
+	@include media('>tablet') {
+		margin-bottom: 0;
+		margin-top: 0;
+	}
+}
+
+
+.wp-block-cover .wp-block-columns {
+	margin-bottom: 0;
+}
+/* wp-block-media-text
+-------------------------------------------- */
+.wp-block-media-text {
+
+
+	img {
+		max-width: 100%;
+		width: auto;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	&.media-100px {
+		grid-template-columns: 100px 1fr;
+
+		h3, .is-style-h3 {
+			margin-bottom: 0;
+		}
+
+		.wp-block-media-text__content {
+			padding: 0 5%;
+			
+			& > * {
+				max-width: to-em(700px);
+			}
+		}
+	}
+
+	&.media-100px.has-media-on-the-right {
+		grid-template-columns: 1fr 100px;
+	}
+	
+	@include media('<=600px') {
+		&.is-stacked-on-mobile {
+			grid-template-columns: 100%!important;  //stack
+	
+			// put a bottom margin under image unless media is on the right, then bottom margin under text block
+			& > figure {
+				margin-bottom: $block-margin;
+			}
+
+			&.has-media-on-the-right {
+				& > .wp-block-media-text__content {
+				margin-bottom: $block-margin;
+				}
+				& > figure {
+					margin-bottom: 0;
+				}
+			}
+		}
+	}
+
+		&.media-30 {
+		grid-template-columns: 30% 1fr;
+
+
+		.wp-block-media-text__content {
+			padding: 0 5%;
+			
+			& > * {
+				max-width: to-em(700px);
+			}
+		}
+	}
+
+	&.media-30.has-media-on-the-right {
+		grid-template-columns: 1fr 30%;
+	}
+	
+	@include media('<=600px') {
+		&.is-stacked-on-mobile {
+			grid-template-columns: 100%!important;  //stack
+	
+			// put a bottom margin under image unless media is on the right, then bottom margin under text block
+			& > figure {
+				margin-bottom: $block-margin;
+			}
+
+			&.has-media-on-the-right {
+				& > .wp-block-media-text__content {
+				margin-bottom: $block-margin;
+				}
+				& > figure {
+					margin-bottom: 0;
+				}
+			}
+		}
+	}
+}
+/* added to remove last child margin-bottom if set to be vertically centered
+---------------------------------------------------------------------------------*/
+
+.wp-block-media-text.is-vertically-aligned-center .wp-block-media-text__content > *:last-child {
+	margin-bottom: 0;
+}
+
+.wp-block-media-text.media-100px {
+	margin-bottom: $block-margin * 2;
 }

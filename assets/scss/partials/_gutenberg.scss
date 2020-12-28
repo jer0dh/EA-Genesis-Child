@@ -1,6 +1,15 @@
-body, p {
+/**
+ * called in editor_styles.scss only
+ */
+
+/**
+ * Taken out since this is also in _blocks-base.scss and this partial and _blocks-base.scss are always
+ * called together 
+ body, p {
 	@include base-style();
 }
+*/
+
 
 /* Post title width */
 .editor-post-title__block.wp-block {

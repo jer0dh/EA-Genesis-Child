@@ -13,7 +13,7 @@
 	width: 100%;
 	max-width: $logo_width;
 	text-align: left;
-	margin: 0 auto;
+	margin: 0;
 
 	h1.site-title,
 	p.site-title {
@@ -29,6 +29,7 @@
 		}
 	}
 
+
 /*
 	.site-title a {
 	  	background: url(../icons/logo.svg) no-repeat center;
@@ -40,11 +41,21 @@
 		padding-bottom: 139px / 623px * 100%;
 	}
 */
+	.wp-custom-logo & .site-title a {
+		background-size: contain;
+		background-repeat: no-repeat;
+		background-position: center;
+		display: block;
+		text-indent: -9999em;
+		width: 100%;
+		height: 0;
+		padding-bottom: 119px / 128px * 100%;
+	}
 
 	@include media("<=mobile_menu") {
 		float: none;
 		text-align: center;
-
+        margin: 0 auto;
 		.site-title a {
 			padding-bottom: 0;
 			height: 48px;
@@ -55,6 +66,15 @@
 
 }
 
+/* site-header wrap */
+
+@include media('>mobile_menu') {
+	.site-header .wrap {
+		display: flex;
+		align-items:center;
+	}
+
+}
 
 /* Admin Bar
 --------------------------------------------- */
@@ -137,4 +157,35 @@
 		}
 
 	}
+}
+
+
+/* Top Bar
+**********************************************************************************************/
+.ea-top-bar {
+	background-color: map-get($brand-colors, 'black');
+	font-size: to-em(12px);
+	color: $white;
+	padding: 0.32em 0;
+
+	p {
+		margin-bottom: 0;
+	}
+
+	a {
+		color: inherit;
+	}
+
+	a:hover, a:focus {
+		color: $grey_7;
+	}
+}
+.ea-top-bar .wrap {
+	display:flex;
+	justify-content:flex-start;
+}
+.ea-top-bar__right {
+	display:flex;
+	align-items: center;
+	margin-left: auto;
 }

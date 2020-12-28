@@ -50,7 +50,8 @@ add_action( 'enqueue_block_editor_assets', 'ea_editor_layout_style' );
 
 /**
  * Editor layout class
- * @link https://www.billerickson.net/change-gutenberg-content-width-to-match-layout/
+ * @link https://www.billerickson.net/change-gutenberg-content-width-to-match-genesis-layout/
+ *
  *
  * @param string $classes
  * @return string

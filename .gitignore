@@ -1,1 +1,12 @@
-config.codekit3
+node_modules/
+.idea/
+rsync.json
+rsync*.json
+sftp.json
+sftp*.json
+/map
+*.map
+images/
+dest/
+scratch.*
+.vscode/

@@ -1,0 +1,21 @@
+.hero-banner {
+    min-height: 300px;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+
+    @include media( '>tablet') {
+        min-height: 600px;
+    }
+
+   
+}
+
+.hero-design-image {
+
+    min-height: to-em(380px);
+
+    @include media('>tablet') {
+    min-height: to-em(450px);
+    }
+}

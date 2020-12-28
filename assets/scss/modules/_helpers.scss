@@ -232,3 +232,61 @@
 		@include columns( $columns, $grid_item_element, $gap );
 	}
 }
+
+
+/* Takes $value and converts it to em using the $global-font-size.
+   if $base is included, it checks if it's a px and if so, it returns the $value / $base * 1em
+   if $base is em, it assumes the $base was created by the $global-font-size.
+
+ */
+@function to-em($value, $base: false) {
+  @if index('px', unit($value)) != null {
+    @if $base {  /* if a base font size was included */
+
+      @if index('px', unit($base)) != null {
+        @return $value / $base * 1em;
+      } @else {  /* assume em value used and that it is based off of global-font-size */
+        @return $value / ($base * $global-font-size) * 1em;
+      }
+
+    }
+    @return $value / $global-font-size * 1em;
+  } @else if index('em', unit($value)) != null {
+      @return $value;
+  }
+  @error "'#{$value}' needs to be px";
+}
+
+
+/* returns the em of the $value if it's a number.
+   otherwise checks to see if it's either xs, sm, md, lg listed in $breakpoints.  If so it returns the em of that breakpoint.
+ */
+@function mq-process($value){
+  @if type-of($value) == 'number' {
+
+    @return to-em($value);
+
+  } @else if map-has_key($grid-breakpoints, $value) {
+      $value: map_get($grid-breakpoints, $value);
+      @return to-em($value);
+  } @else {
+    @error "`#{$value}' doesn't exist in $breakpoints"
+  }
+}
+
+/* power function */
+@function pow($number, $exponent) {
+  $value: 1;
+
+  @if $exponent > 0 {
+    @for $i from 1 through $exponent {
+      $value: $value * $number;
+    }
+  } @else if $exponent < 0 {
+    @for $i from 1 through -$exponent {
+      $value: $value / $number;
+    }
+  }
+
+  @return $value;
+}

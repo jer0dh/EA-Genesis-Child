@@ -1,0 +1,31 @@
+.widgettitle,
+.widget-title {
+  font-size: 1em;
+  text-transform: uppercase;
+  color: map-get($brand_colors, 'blue' );
+  font-weight: 800;
+  margin-bottom: 12px;
+  max-width: to-em(250px);
+}
+
+
+  hr.widget {
+    margin-top: 40px;
+    border: none;
+
+    &:before {
+      content:'';
+      border-top: 1px solid brand-color('blue');
+      width: to-em(37px);
+    }
+  }
+
+  aside.sidebar {
+    & > .widget:first-of-type {
+    margin-top: $content-margin;
+    }
+    & > .widget:last-of-type {
+      margin-bottom: $content-margin;
+    }
+  }
+

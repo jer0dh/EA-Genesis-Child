@@ -53,3 +53,20 @@ class BE_ACF_Customizations {
 	}
 }
 new BE_ACF_Customizations();
+/*
+// ACF helper function
+
+function ea_get_pfiltered_field( $name=null ) {
+	$return = '';
+	if ( $name ) {
+		add_filter( 'acf_the_content', 'ea_pfiltered', 20 );
+		$return = get_field( $name );
+		remove_filter( 'acf_the_content', 'ea_pfiltered', 20 );
+	}
+	return $return;
+}
+
+function ea_pfiltered( $content ) {
+	return str_replace( '<p></p>', '', $content );
+}
+*/
